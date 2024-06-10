@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking Registration Form</title>
+    <script>
+        function calculateCost() {
+            // Rates of Room
+            const rates = {
+                delux: 100,
+                suite: 150,
+                ac: 20,
+                locker: 10,
+                extraPerson: 1000
+            };
+
+            // Get selected values
+            const roomType = document.getElementById('roomType').value;
+            const ac = document.getElementById('ac').checked;
+            const locker = document.getElementById('locker').checked;
+            const totalDays = parseInt(document.getElementById('totalDays').value, 10) || 0;
+            const totalPersons = parseInt(document.getElementById('totalPersons').value, 10) || 1;
+            const advanceAmount = parseFloat(document.getElementById('advanceAmount').value) || 0;
+
+            // Calculate room and amenities costs
+            let roomCost = (roomType === 'delux' ? rates.delux : rates.suite) * totalDays;
+            let amenitiesCost = 0;
+
+            if (ac) amenitiesCost += rates.ac * totalDays;
+            if (locker) amenitiesCost += rates.locker * totalDays;
+
+            // Extra person charge
+            let extraPersonCharge = 0;
+            if (totalPersons > 2) {
+                extraPersonCharge = (totalPersons - 2) * rates.extraPerson * totalDays;
+            }
+
+            // Total cost
+            const totalCost = roomCost + amenitiesCost + extraPersonCharge;
+            const balance = totalCost - advanceAmount;
+
+            // Display costs
+            document.getElementById('roomCost').innerText = roomCost;
+            document.getElementById('amenitiesCost').innerText = amenitiesCost;
+            document.getElementById('extraPersonCost').innerText = extraPersonCharge;
+            document.getElementById('totalCost').innerText = totalCost;
+            document.getElementById('balance').innerText = balance;
+        }
+    </script>
+</head>
+<body>
+
+    <h2>Hotel Booking Registration Form</h2>
+    <form>
+        <label for="customerName">Customer Name (required):</label>
+        <input type="text" id="customerName" name="customerName" required><br><br>
+
+        <label for="checkInDate">Check-in Date (required):</label>
+        <input type="date" id="checkInDate" name="checkInDate" required><br><br>
+
+        <label for="totalDays">Total Days (required):</label>
+        <input type="number" id="totalDays" name="totalDays" min="1" required><br><br>
+
+        <label for="totalPersons">Total Persons:</label>
+        <input type="number" id="totalPersons" name="totalPersons" min="1" value="1"><br><br>
+
+        <label for="advanceAmount">Advance Amount (required):</label>
+        <input type="number" id="advanceAmount" name="advanceAmount" step="0.01" required><br><br>
+
+        <label for="roomType">Room Type:</label>
+        <select id="roomType" name="roomType" onchange="calculateCost()">
+            <option value="delux">Delux</option>
+            <option value="suite">Suite</option>
+        </select><br><br>
+
+        <label for="ac">AC:</label>
+        <input type="checkbox" id="ac" name="ac" onclick="calculateCost()"><br><br>
+
+        <label for="locker">Locker:</label>
+        <input type="checkbox" id="locker" name="locker" onclick="calculateCost()"><br><br>
+
+        <h3>Cost Breakdown</h3>
+        <p>Room Cost: $<span id="roomCost">0</span></p>
+        <p>Amenities Cost: $<span id="amenitiesCost">0</span></p>
+        <p>Extra Person Cost: $<span id="extraPersonCost">0</span></p>
+        <p>Total Cost: $<span id="totalCost">0</span></p>
+        <p>Balance: $<span id="balance">0</span></p>
+    </form>
+
+</body>
+</html>
